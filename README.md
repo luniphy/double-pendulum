@@ -1,4 +1,4 @@
-﻿[![CI](https://github.com/luniphys/double-pendulum/actions/workflows/ci.yml/badge.svg)](https://github.com/luniphys/double-pendulum/actions/workflows/ci.yml)
+﻿[![CI](https://github.com/luniphy/double-pendulum/actions/workflows/ci.yml/badge.svg)](https://github.com/luniphy/double-pendulum/actions/workflows/ci.yml)
 [![C#](https://custom-icon-badges.demolab.com/badge/C%23-%23239120.svg?logo=cshrp&logoColor=white)](https://learn.microsoft.com/en-us/dotnet/csharp/)
 [![.NET](https://img.shields.io/badge/WPF-512BD4?logo=dotnet&logoColor=fff)](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/)
 [![Docker](https://img.shields.io/badge/Docker-%230db7ed.svg?&logo=docker&logoColor=white)](https://hub.docker.com/r/luniphys/double-pendulum)
@@ -6,7 +6,7 @@
 
 # Double Pendulum
 
-A desktop application that simulates a double pendulum in real time. The physics are solved numerically using a 4th-order Runge-Kutta integrator. Pendulum parameters (arm lengths, masses, initial angles, damping), simulation speed as well as the trail length can be adjusted interactively via sliders.
+A desktop application that simulates a double pendulum in real time. The physics equations are solved numerically using the 4th-order Runge-Kutta method. Pendulum parameters (arm lengths, masses, initial angles, damping), simulation speed as well as the trail length are adjustable.
 
 <p align="center">
     <img src="docs/Images/gui_image.png" width="800" alt="GUI image">
@@ -26,7 +26,7 @@ A desktop application that simulates a double pendulum in real time. The physics
 
 ## Overview
 
-The double pendulum is a classical example of a chaotic dynamical system. Small differences in initial conditions lead to vastly different trajectories over time. This application lets you explore that behaviour interactively by configuring the physical parameters of the system and watching the simulation evolve in real time.
+The double pendulum is a classical example of a chaotic dynamical system. Small differences in initial conditions lead to vastly different trajectories over time. This application lets you explore that behaviour interactively by configuring the physical parameters and watching the simulation evolve in real time.
 
 The project is split into three separate components:
 
@@ -36,17 +36,16 @@ The project is split into three separate components:
 
 The simulation pipeline is:
 
-1. Set physical parameters, simulation speed and trail length via sliders (Presentation) or console prompts (CLI).
+1. Set the parameters, simulation speed and trail length via sliders (Presentation) or console prompts (CLI).
 2. At each frame, the physics engine advances the state by integrating the equations of motion using **RK4**.
-3. The renderer converts the polar state $(\theta_1, \theta_2)$ to Cartesian coordinates and draws the pendulum on a WPF canvas.
-4. Reset the pendulum for launching with different parameters.
+3. The renderer converts the polar state $(\theta_1, \theta_2)$ to Cartesian coordinates and draws the pendulum on a WPF canvas/ console output.
 
 ## Features
 
-- Real-time simulation with configurable step size
 - Adjustable arm lengths, masses, initial angles, damping coefficient, simulation speed and trail length
 - Switchable colorization of the individual pendulums and its trail depending on their angular velocity
 - Possible raw data output of positions as json file in CLI project part
+- **xUnit** test coverage of physics model
 
 ## Requirements
 
@@ -55,11 +54,10 @@ The simulation pipeline is:
 
 ## Build & Run
 
-Clone the repository and run the application from the solution root:
+Clone the repository:
 
 ```sh
 git clone https://github.com/luniphys/double-pendulum.git
-cd double-pendulum
 ```
 
 Running the WPF application:
@@ -105,7 +103,7 @@ docker run --rm -it \
 ### Notes
 
 - Run the container in interactive mode: `-it`
-- json output stored in output/ directory
+- json output stored in `output/` directory
 
 ## Testing
 
@@ -122,32 +120,35 @@ Tests are written with **xUnit** and cover:
 - Runge-Kutta 4th-order integration
 - Simulation step updates
 - Coordinate transformation
-- Physical properties: pendulum at rest stays at rest, energy conservation with and without damping
+- Physical properties:
+  - Pendulum at rest stays at rest
+  - Energy conservation with and without damping
 
 ## Project Structure
 
 ```
 src/
-  double-pendulum.Model/          # Physics engine and parameter types (shared)
-    PendulumParameters.cs
-    PendulumPhysics.cs
+  double-pendulum.Model/          # Physics engine and parameters (shared)
+    PendulumParameters.cs         # Physical parameters
+    PendulumPhysics.cs            # Numerical system solver (RK4)
   double-pendulum.Presentation/   # WPF application (MVVM)
     Commands/                     # RelayCommand
     ViewModels/                   # MainViewModel, ViewModelBase
     Views/
       Controls/                   # Custom controls (QuantitySlider)
       Rendering/                  # PendulumRenderer
-      MainWindow.xaml
+      MainWindow                  # XAML + Code-behind
   double-pendulum.CLI/            # Console application
-    InputHandler.cs
-    SimulationPrinter.cs
+    Program.cs                    # Entry point
+    InputHandler.cs               # User input handler
+    SimulationPrinter.cs          # Console printer + json output
 tests/                            # xUnit unit tests
 docs/                             # Documentation assets
 ```
 
 ## Mathematics
 
-The double pendulum is described by two coupled, nonlinear second-order differential equations (Lagrangian mechanics). An optional linear damping term $b$ is included to model energy dissipation.
+The double pendulum is described by two coupled, nonlinear second-order differential equations (Lagrangian mechanics). An optional damping term $b$ is included to consider energy loss.
 
 ### Equations of Motion
 
@@ -161,7 +162,7 @@ $$
 
 ### State Vector Formulation
 
-The system state is represented as a vector of angles and angular velocities:
+The system state is represented by a vector of angles and angular velocities:
 
 ```math
 $$
@@ -195,7 +196,7 @@ $$
 
 ### Numerical Integration — Runge-Kutta 4th Order
 
-The state is advanced in time using the classical RK4 method, which provides 4th-order accuracy per step:
+The state is advanced in time using the RK4 method:
 
 $$
 \vec{y}_{i+1} = \vec{y}_i + \frac{h}{6} \cdot \left(\vec{\kappa_0} + 2 \vec{\kappa_1} + 2 \vec{\kappa_2} + \vec{\kappa_3} \right)
@@ -205,8 +206,8 @@ $$
 \vec{\kappa}_0 = \vec{f} \left(\vec{y}_i \right), \quad \vec{\kappa}_1 = \vec{f} \left(\vec{y}_i + \frac{h}{2} \cdot \vec{\kappa}_0 \right), \quad \vec{\kappa}_2 = \vec{f} \left(\vec{y}_i + \frac{h}{2} \cdot \vec{\kappa}_1 \right), \quad \vec{\kappa}_3 = \vec{f} \left(\vec{y}_i + h \cdot \vec{\kappa}_2 \right)
 $$
 
-where $h$ is the step size between consecutive time stamps $t_i$ and $t_{i+1}$.
+where $h$ is the step size between the time steps $t_i$ and $t_{i+1}$.
 
 ## License
 
-MIT © [luniphys](https://github.com/luniphys)
+MIT © [luniphy](https://github.com/luniphy)
