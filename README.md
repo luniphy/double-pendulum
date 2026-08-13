@@ -57,7 +57,7 @@ The simulation pipeline is:
 Clone the repository:
 
 ```sh
-git clone https://github.com/luniphys/double-pendulum.git
+git clone https://github.com/luniphy/double-pendulum.git
 ```
 
 Running the WPF application:
