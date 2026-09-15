@@ -127,23 +127,41 @@ Tests are written with **xUnit** and cover:
 ## Project Structure
 
 ```
-src/
-  double-pendulum.Model/          # Physics engine and parameters (shared)
-    PendulumParameters.cs         # Physical parameters
-    PendulumPhysics.cs            # Numerical system solver (RK4)
-  double-pendulum.Presentation/   # WPF application (MVVM)
-    Commands/                     # RelayCommand
-    ViewModels/                   # MainViewModel, ViewModelBase
-    Views/
-      Controls/                   # Custom controls (QuantitySlider)
-      Rendering/                  # PendulumRenderer
-      MainWindow                  # XAML + Code-behind
-  double-pendulum.CLI/            # Console application
-    Program.cs                    # Entry point
-    InputHandler.cs               # User input handler
-    SimulationPrinter.cs          # Console printer + json output
-tests/                            # xUnit unit tests
-docs/                             # Documentation assets
+double-pendulum/
+├─ .github/workflows/ci.yml             # CI workflow
+├─ docs/Images                          # Documentation images
+├─ output/                              # JSON output of CLI
+├─ src/
+│  ├─ double-pendulum.CLI/              # Console application
+│  │  ├─ InputHandler.cs                # User input handling
+│  │  ├─ Program.cs                     # Entry point
+│  │  └─ SimulationPrinter.cs           # Console & JSON output
+│  ├─ double-pendulum.Model/            # Physics engine (shared)
+│  │  ├─ PendulumParameters.cs          # Physical parameters
+│  │  └─ PendulumPhysics.cs             # Numerical system solver (RK4)
+│  └─ double-pendulum.Presentation/     # WPF application (MVVM)
+│     ├─ Commands/
+│     │  └─ RelayCommand.cs
+│     ├─ Resources/Icons/               # App icons
+│     ├─ ViewModels/
+│     │  ├─ MainViewModel.cs
+│     │  └─ ViewModelBase.cs
+│     ├─ Views/
+│     │  ├─ Controls/                   # Custom controls
+│     │  │  ├─ QuantitySlider.xaml    
+│     │  │  └─ QuantitySlider.xaml.cs
+│     │  ├─ Rendering/
+│     │  │  └─ PendulumRenderer.cs      # Canvas renderer
+│     │  ├─ MainWindow.xaml
+│     │  └─ MainWindow.xaml.cs
+│     ├─ App.xaml
+│     ├─ App.xaml.cs
+│     └─ AssemblyInfo.cs
+├─ tests/
+│  └─ PendulumPhysicsTests.cs           # xUnit tests
+├─ Dockerfile
+├─ LICENSE
+└─ README.md
 ```
 
 ## Mathematics
