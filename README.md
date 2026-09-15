@@ -129,7 +129,7 @@ Tests are written with **xUnit** and cover:
 ```
 double-pendulum/
 ├─ .github/workflows/ci.yml             # CI workflow
-├─ docs/Images                          # Documentation images
+├─ docs/Images/                         # Documentation images
 ├─ output/                              # JSON output of CLI
 ├─ src/
 │  ├─ double-pendulum.CLI/              # Console application
@@ -148,7 +148,7 @@ double-pendulum/
 │     │  └─ ViewModelBase.cs
 │     ├─ Views/
 │     │  ├─ Controls/                   # Custom controls
-│     │  │  ├─ QuantitySlider.xaml    
+│     │  │  ├─ QuantitySlider.xaml
 │     │  │  └─ QuantitySlider.xaml.cs
 │     │  ├─ Rendering/
 │     │  │  └─ PendulumRenderer.cs      # Canvas renderer
