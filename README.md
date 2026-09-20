@@ -18,11 +18,11 @@ A desktop application that simulates a double pendulum in real time. The physics
 
 - [Overview](#overview)
 - [Features](#features)
+- [Project Structure](#project-structure)
 - [Requirements](#requirements)
 - [Build & Run](#build--run)
-- [Docker](#docker)
 - [Testing](#testing)
-- [Project Structure](#project-structure)
+- [Docker](#docker)
 - [Mathematics](#mathematics)
 - [License](#license)
 
@@ -49,90 +49,6 @@ The simulation pipeline is:
 - Possible raw data output of positions as json file in CLI project part
 - **xUnit** test coverage of physics model
 - **CI/CD**: Automated code test and lint checks, followed by vulnerability scanning and image pushes to Docker Hub / GHCR on success
-
-## Requirements
-
-- Windows
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)
-
-## Build & Run
-
-Clone the repository:
-
-```sh
-git clone https://github.com/luniphy/double-pendulum.git
-```
-
-Running the WPF application:
-
-```sh
-dotnet run --project src/double-pendulum.Presentation
-```
-
-Running the CLI application:
-
-```sh
-dotnet run --project src/double-pendulum.CLI
-```
-
-## Docker
-
-A Dockerfile is included to provide a reproducible runtime environment. Since WPF GUI's have no native docker container support, only the CLI application part has a buildable image.
-
-### Build the image
-
-From the repository root, build the Docker image:
-
-```bash
-docker build -t double-pendulum .
-```
-
-### Pull from Docker Hub / GHCR
-
-Prebuilt images are also available on [Docker Hub](https://hub.docker.com/r/luniphy/double-pendulum):
-
-```bash
-docker pull luniphy/double-pendulum:latest
-```
-
-And on the [GitHub Container Registry](https://github.com/luniphy/double-pendulum/pkgs/container/double-pendulum):
-
-```bash
-docker pull ghcr.io/luniphy/double-pendulum:latest
-```
-
-### Run the container
-
-```bash
-docker run --rm -it \
-  -v "$(pwd)/output:/app/output" \
-  double-pendulum
-```
-
-### Notes
-
-- To run pulled images, use `luniphy/double-pendulum` or `ghcr.io/luniphy/double-pendulum` respectively.
-- Run the container in interactive mode: `-it`
-- json output stored in `output/` directory
-
-## Testing
-
-Run the full test suite from the solution root:
-
-```sh
-dotnet test
-```
-
-Tests are written with **xUnit** and cover:
-
-- State initialisation
-- Derivative calculation
-- Runge-Kutta 4th-order integration
-- Simulation step updates
-- Coordinate transformation
-- Physical properties:
-  - Pendulum at rest stays at rest
-  - Energy conservation with and without damping
 
 ## Project Structure
 
@@ -173,6 +89,90 @@ double-pendulum/
 ├─ LICENSE
 └─ README.md
 ```
+
+## Requirements
+
+- Windows
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+
+## Build & Run
+
+Clone the repository:
+
+```sh
+git clone https://github.com/luniphy/double-pendulum.git
+```
+
+Running the WPF application:
+
+```sh
+dotnet run --project src/double-pendulum.Presentation
+```
+
+Running the CLI application:
+
+```sh
+dotnet run --project src/double-pendulum.CLI
+```
+
+## Testing
+
+Run the full test suite from the solution root:
+
+```sh
+dotnet test
+```
+
+Tests are written with **xUnit** and cover:
+
+- State initialisation
+- Derivative calculation
+- Runge-Kutta 4th-order integration
+- Simulation step updates
+- Coordinate transformation
+- Physical properties:
+  - Pendulum at rest stays at rest
+  - Energy conservation with and without damping
+
+## Docker
+
+A Dockerfile is included to provide a reproducible runtime environment. Since WPF GUI's have no native docker container support, only the CLI application part has a buildable image.
+
+### Build the image
+
+From the repository root, build the Docker image:
+
+```bash
+docker build -t double-pendulum .
+```
+
+### Pull from Docker Hub / GHCR
+
+Prebuilt images are also available on [Docker Hub](https://hub.docker.com/r/luniphy/double-pendulum):
+
+```bash
+docker pull luniphy/double-pendulum:latest
+```
+
+And on the [GitHub Container Registry](https://github.com/luniphy/double-pendulum/pkgs/container/double-pendulum):
+
+```bash
+docker pull ghcr.io/luniphy/double-pendulum:latest
+```
+
+### Run the container
+
+```bash
+docker run --rm -it \
+  -v "$(pwd)/output:/app/output" \
+  double-pendulum
+```
+
+### Notes
+
+- To run pulled images, use `luniphy/double-pendulum` or `ghcr.io/luniphy/double-pendulum` respectively.
+- Run the container in interactive mode: `-it`
+- json output stored in `output/` directory
 
 ## Mathematics
 
