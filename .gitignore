@@ -58,3 +58,4 @@ nunit-*.xml
 .vs/
 *.user
 output/simulation_*
+.github/workflows/dockerhub_token.txt

@@ -1,7 +1,9 @@
 ﻿[![CI](https://github.com/luniphy/double-pendulum/actions/workflows/ci.yml/badge.svg)](https://github.com/luniphy/double-pendulum/actions/workflows/ci.yml)
+[![CD](https://github.com/luniphy/double-pendulum/actions/workflows/cd.yml/badge.svg)](https://github.com/luniphy/double-pendulum/actions/workflows/cd.yml)
 [![C#](https://custom-icon-badges.demolab.com/badge/C%23-%23239120.svg?logo=cshrp&logoColor=white)](https://learn.microsoft.com/en-us/dotnet/csharp/)
 [![.NET](https://img.shields.io/badge/WPF-512BD4?logo=dotnet&logoColor=fff)](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/)
-[![Docker](https://img.shields.io/badge/Docker-%230db7ed.svg?&logo=docker&logoColor=white)](https://hub.docker.com/r/luniphys/double-pendulum)
+[![Docker](https://img.shields.io/badge/Docker-%230db7ed.svg?&logo=docker&logoColor=white)](https://hub.docker.com/r/luniphy/double-pendulum)
+[![GHCR](https://img.shields.io/badge/GHCR-181717?logo=github)](https://github.com/luniphy/double-pendulum/pkgs/container/double-pendulum)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 # Double Pendulum
@@ -46,6 +48,7 @@ The simulation pipeline is:
 - Switchable colorization of the individual pendulums and its trail depending on their angular velocity
 - Possible raw data output of positions as json file in CLI project part
 - **xUnit** test coverage of physics model
+- **CI/CD**: Automated code test and lint checks, followed by vulnerability scanning and image pushes to Docker Hub / GHCR on success
 
 ## Requirements
 
@@ -84,12 +87,18 @@ From the repository root, build the Docker image:
 docker build -t double-pendulum .
 ```
 
-### Pull from Docker Hub
+### Pull from Docker Hub / GHCR
 
-A prebuilt image is also available on [Docker Hub](https://hub.docker.com/r/luniphys/double-pendulum):
+Prebuilt images are also available on [Docker Hub](https://hub.docker.com/r/luniphy/double-pendulum):
 
 ```bash
-docker pull luniphys/double-pendulum
+docker pull luniphy/double-pendulum:latest
+```
+
+And on the [GitHub Container Registry](https://github.com/luniphy/double-pendulum/pkgs/container/double-pendulum):
+
+```bash
+docker pull ghcr.io/luniphy/double-pendulum:latest
 ```
 
 ### Run the container
@@ -102,6 +111,7 @@ docker run --rm -it \
 
 ### Notes
 
+- To run pulled images, use `luniphy/double-pendulum` or `ghcr.io/luniphy/double-pendulum` respectively.
 - Run the container in interactive mode: `-it`
 - json output stored in `output/` directory
 
