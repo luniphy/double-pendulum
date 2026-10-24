@@ -2,15 +2,12 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
-using System.Text.Json;
 
 
 namespace double_pendulum.CLI;
 
 public static class SimulationPrinter
 {
-    private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
-
     /// <summary>
     /// Runs a full physics simulation on all initial parameters in real time.
     /// <remarks>Possibility to set a fixed sim timespan or start & end by key press.</remarks>
@@ -105,23 +102,19 @@ public static class SimulationPrinter
         while (Console.KeyAvailable)
             Console.ReadKey(intercept: true);
 
-        Dictionary<string, List<float>> positionData = new Dictionary<string, List<float>>()
-        {
-            ["X1"] = x1,
-            ["Y1"] = y1,
-            ["X2"] = x2,
-            ["Y2"] = y2,
-        };
-
-        ExportData(positionData);
+        PositionsExport positionsExport = new PositionsExport(x1, y1, x2, y2);
+        PromptAndExport(simTime, stepSize, parameters, positionsExport);
     }
 
 
     /// <summary>
-    /// Asks user if the data should be exported as JSON to double-pendulum/output/simulation_***.json
+    /// Asks user if the data should be exported as JSON.
     /// </summary>
-    /// <param name="positionData">Dictionary with positions as separate lists</param>
-    private static void ExportData(Dictionary<string, List<float>> positionData)
+    /// <param name="duration">Simulation time length</param>
+    /// <param name="stepSize">Simulation step size</param>
+    /// <param name="parameters">Initial pendulum parameters</param>
+    /// <param name="positions">Cartesian positions as separate lists</param>
+    private static void PromptAndExport(float duration, float stepSize, PendulumParameters parameters, PositionsExport positions)
     {
         string answer;
 
@@ -142,23 +135,9 @@ public static class SimulationPrinter
         if (answer != "y" && answer != "yes") { return; }
 
 
-        //string rootPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
-        //string outputPath = Path.Combine(rootPath, "output");
-        string outputPath = Path.Combine(Directory.GetCurrentDirectory(), "output");
-        Directory.CreateDirectory(outputPath);
+        DateTime createdAtUtc = DateTime.UtcNow;
+        SimulationExport simExport = new SimulationExport(createdAtUtc, duration, stepSize, parameters, positions);
 
-        string timestamp = DateTime.Now.ToString("dd-MM-yyyy__HH-mm-ss");
-        string filePath = Path.Combine(outputPath, $"simulation_{timestamp}.json");
-
-        try
-        {
-            string json = JsonSerializer.Serialize(positionData, _jsonOptions);
-            File.WriteAllText(filePath, json);
-            Console.WriteLine($"Exported to: {filePath}");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Export failed: {e.Message}");
-        }
+        JsonExporter.Export(simExport);
     }
 }
