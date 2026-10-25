@@ -1,7 +1,13 @@
 ﻿namespace double_pendulum.CLI;
 
-public class MongoExporter
+public static class MongoExporter
 {
-}
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="simExport">Export model containing simulation data.</param>
+    public static void Export(ExportDTO simExport)
+    {
 
-// TODO: Restore actual path
+    }
+}

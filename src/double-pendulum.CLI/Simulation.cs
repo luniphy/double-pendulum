@@ -6,14 +6,15 @@ using System.Numerics;
 
 namespace double_pendulum.CLI;
 
-public static class SimulationPrinter
+public static class Simulation
 {
     /// <summary>
     /// Runs a full physics simulation on all initial parameters in real time.
-    /// <remarks>Possibility to set a fixed sim timespan or start & end by key press.</remarks>
     /// </summary>
+    /// <remarks>Possibility to set a fixed sim timespan or start and end by key press.</remarks>
     /// <param name="parameters">Set of initial physical parameters of type <see cref="PendulumParameters"/></param>
-    public static void Run(PendulumParameters parameters)
+    /// <returns>Simulation export data transfer object of type <see cref="ExportDTO"/></returns>
+    public static ExportDTO Run(PendulumParameters parameters)
     {
         PendulumPhysics physics = new PendulumPhysics(parameters);
 
@@ -23,12 +24,12 @@ public static class SimulationPrinter
         List<float> y2 = new List<float>();
 
         bool fixedTime = false;
-        bool timePromptBool = true;
+        bool timePromptIsInvalid = true;
         double timeSpan = 0.0;
 
         Console.WriteLine("\n-------------------------------------------------------------------------------");
         Console.WriteLine("Do you want to simulate for a fixed time, or start & end yourself by key press?\n");
-        while (timePromptBool)
+        while (timePromptIsInvalid)
         {
             Console.WriteLine("Enter time span in [s]: (Enter 0 if you want key press based start & stop.)");
             string input = Console.ReadLine() ?? string.Empty;
@@ -39,11 +40,11 @@ public static class SimulationPrinter
                     fixedTime = true;
                     timeSpan = value;
                 }
-                timePromptBool = false;
+                timePromptIsInvalid = false;
             }
             else
             {
-                Console.WriteLine("Invalid Input!\n");
+                Console.WriteLine("Invalid input!\n");
             }
         }
 
@@ -74,13 +75,13 @@ public static class SimulationPrinter
                 accumulator -= stepSize;
             }
 
-            Vector4 positions = physics.GetPosition();
-            Console.WriteLine($"{simTime, 12:F8}{positions.X, 12:F8}{positions.Y, 12:F8}{positions.Z, 12:F8}{positions.W, 12:F8}");
+            Vector4 position = physics.GetPosition();
+            Console.WriteLine($"{simTime, 12:F8}{position.X, 12:F8}{position.Y, 12:F8}{position.Z, 12:F8}{position.W, 12:F8}");
 
-            x1.Add(positions.X);
-            y1.Add(positions.Y);
-            x2.Add(positions.Z);
-            y2.Add(positions.W);
+            x1.Add(position.X);
+            y1.Add(position.Y);
+            x2.Add(position.Z);
+            y2.Add(position.W);
 
             Thread.Sleep(1); // Yield CPU and cap the console output rate.
 
@@ -102,42 +103,10 @@ public static class SimulationPrinter
         while (Console.KeyAvailable)
             Console.ReadKey(intercept: true);
 
-        PositionsExport positionsExport = new PositionsExport(x1, y1, x2, y2);
-        PromptAndExport(simTime, stepSize, parameters, positionsExport);
-    }
-
-
-    /// <summary>
-    /// Asks user if the data should be exported as JSON.
-    /// </summary>
-    /// <param name="duration">Simulation time length</param>
-    /// <param name="stepSize">Simulation step size</param>
-    /// <param name="parameters">Initial pendulum parameters</param>
-    /// <param name="positions">Cartesian positions as separate lists</param>
-    private static void PromptAndExport(float duration, float stepSize, PendulumParameters parameters, PositionsExport positions)
-    {
-        string answer;
-
-        do
-        {
-            Console.WriteLine("\n-------------------------------------------------------------------------------");
-            Console.WriteLine("Want to export data to JSON? (y/n)");
-
-            answer = (Console.ReadLine() ?? string.Empty).ToLower();
-
-            if (answer != "y" && answer != "yes" && answer != "n" && answer != "no")
-            {
-                Console.WriteLine("Invalid input!");
-            }
-        }
-        while (answer != "y" && answer != "yes" && answer != "n" && answer != "no");
-
-        if (answer != "y" && answer != "yes") { return; }
-
-
+        Coordinates coordinates = new Coordinates(x1, y1, x2, y2);
         DateTime createdAtUtc = DateTime.UtcNow;
-        SimulationExport simExport = new SimulationExport(createdAtUtc, duration, stepSize, parameters, positions);
+        ExportDTO simExport = new ExportDTO(createdAtUtc, simTime, stepSize, parameters, coordinates);
 
-        JsonExporter.Export(simExport);
+        return simExport;
     }
 }

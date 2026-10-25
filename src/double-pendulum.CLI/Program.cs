@@ -6,26 +6,25 @@ public class Program
 {
     public static void Main()
     {
-        string again;
+        bool again;
 
         do
         {
-            PendulumParameters parameters = InputHandler.ReadParameters();
-            SimulationPrinter.Run(parameters);
+            PendulumParameters parameters = ParameterInputHandler.ReadParameters();
+            ExportDTO simExport = Simulation.Run(parameters);
 
-            do
+            if (ConsolePrompt.AskYesNo("Want to export data to JSON? (y/n)"))
             {
-                Console.WriteLine("\n-------------------------------------------------------------------------------");
-                Console.WriteLine("Run another simulation? (y/n)");
-                again = (Console.ReadLine() ?? string.Empty).ToLower();
-
-                if (again != "y" && again != "yes" && again != "n" && again != "no")
-                {
-                    Console.WriteLine("Invalid input!");
-                }
+                JsonExporter.Export(simExport);
             }
-            while (again != "y" && again != "yes" && again != "n" && again != "no");
+
+            if (ConsolePrompt.AskYesNo("Want to export data to MongoDB? (y/n)"))
+            {
+                MongoExporter.Export(simExport);
+            }
+
+            again = ConsolePrompt.AskYesNo("Run another simulation? (y/n)");
         }
-        while (again == "y" || again == "yes");
+        while (again);
     }
 }

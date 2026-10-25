@@ -3,36 +3,38 @@
 namespace double_pendulum.CLI;
 
 /// <summary>
-/// Export model for a finished simulation run. Holds creation time (UTC), duration, step size,
-/// the initial pendulum parameters (angles in radians) and the cartesian positions.
+/// Export model for a finished simulation run. Creation time is in UTC and pendulum angles are in radians.
 /// </summary>
-public class SimulationExport
+public class ExportDTO
 {
     public DateTime CreatedAtUtc { get; }
     public float Duration { get; }
     public float StepSize { get; }
     public PendulumParameters Parameters { get; }
-    public PositionsExport Positions { get; }
+    public Coordinates Coordinates { get; }
 
 
-    public SimulationExport(DateTime createdAtUtc, float duration, float stepSize, PendulumParameters parameters, PositionsExport positions)
+    public ExportDTO(DateTime createdAtUtc, float duration, float stepSize, PendulumParameters parameters, Coordinates coordinates)
     {
         this.CreatedAtUtc = createdAtUtc;
         this.Duration = duration;
         this.StepSize = stepSize;
         this.Parameters = parameters;
-        this.Positions = positions;
+        this.Coordinates = coordinates;
     }
 }
 
-public class PositionsExport
+/// <summary>
+/// Lists of the cartesian coordinates of the pendulums.
+/// </summary>
+public class Coordinates
 {
     public List<float> X1 { get; }
     public List<float> Y1 { get; }
     public List<float> X2 { get; }
     public List<float> Y2 { get; }
 
-    public PositionsExport(List<float> x1, List<float> y1, List<float> x2, List<float> y2)
+    public Coordinates(List<float> x1, List<float> y1, List<float> x2, List<float> y2)
     {
         this.X1 = x1;
         this.Y1 = y1;

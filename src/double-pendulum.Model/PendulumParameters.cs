@@ -24,7 +24,7 @@ public class PendulumParameters // Improvement: Use "record" instead of class fo
         this.Length2 = length2;
         this.Mass1 = mass1;
         this.Mass2 = mass2;
-        this.Angle1 = angle1 * DegreesToRadians; // Conversion degrees -> radiants
+        this.Angle1 = angle1 * DegreesToRadians; // Conversion degrees -> radians
         this.Angle2 = angle2 * DegreesToRadians;
         this.Damp = damp;
     }

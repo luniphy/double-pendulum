@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace double_pendulum.CLI;
 
-public static class InputHandler
+public static class ParameterInputHandler
 {
     /// <summary>
     /// Prompts user to input parameter values via console.
@@ -31,7 +31,7 @@ public static class InputHandler
     /// <param name="range">Allowed range of values for user info.</param>
     /// <param name="minValue">Minimum allowed value.</param>
     /// <param name="maxValue">Maximum allowed value.</param>
-    /// <returns></returns>
+    /// <returns>Checked float value.</returns>
     private static float ReadValue(string prompt, string range, float minValue, float maxValue)
     {
         while (true)
