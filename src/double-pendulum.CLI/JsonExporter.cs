@@ -28,7 +28,7 @@ public static class JsonExporter
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Export failed: {e.Message}");
+            Console.WriteLine($"Json export failed: {e.Message}");
         }
     }
 }

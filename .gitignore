@@ -59,3 +59,4 @@ nunit-*.xml
 *.user
 output/simulation_*
 .github/workflows/dockerhub_token.txt
+src/double-pendulum.CLI/credentials/
