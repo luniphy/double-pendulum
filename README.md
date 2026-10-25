@@ -34,7 +34,7 @@ The double pendulum is a classical example of a chaotic dynamical system. Small 
 The project is split into three separate components:
 
 - **Model** — physics engine and parameter types, shared by both frontends
-- **CLI** — console application for raw data output
+- **CLI** — console application for raw data export to **Json** & **MongoDB**
 - **Presentation** — WPF application built with MVVM
 
 The simulation pipeline is:
@@ -47,7 +47,9 @@ The simulation pipeline is:
 
 - Adjustable arm lengths, masses, initial angles, damping coefficient, simulation speed and trail length
 - Switchable colorization of the individual pendulums and its trail depending on their angular velocity
-- Possible raw data output of positions as json file in CLI project part
+- In the CLI project part:
+  - Select fixed simulation time or start/stop by key press
+  - Raw data output of positions and metadata with optional export to **Json** file and/or **MongoDB Atlas** database
 - **xUnit** test coverage of physics model
 - **CI/CD**: Automated code test and lint checks, followed by vulnerability scanning and image pushes to Docker Hub / GHCR on success
 
@@ -55,14 +57,20 @@ The simulation pipeline is:
 
 ```
 double-pendulum/
-├─ .github/workflows/ci.yml             # CI workflow
+├─ .github/workflows/
+│  ├─ ci.yml                            # CI workflow
+│  └─ cd.yml                            # CD workflow
 ├─ docs/Images/                         # Documentation images
 ├─ output/                              # JSON output of CLI
 ├─ src/
 │  ├─ double-pendulum.CLI/              # Console application
-│  │  ├─ InputHandler.cs                # User input handling
+│  │  ├─ ConsolePrompt.cs               # User prompting loop
+│  │  ├─ ExportDTO.cs                   # Data transfer object
+│  │  ├─ JsonExporter.cs
+│  │  ├─ MongoExporter.cs
+│  │  ├─ ParameterInputHandler.cs
 │  │  ├─ Program.cs                     # Entry point
-│  │  └─ SimulationPrinter.cs           # Console & JSON output
+│  │  └─ Simulation.cs
 │  ├─ double-pendulum.Model/            # Physics engine (shared)
 │  │  ├─ PendulumParameters.cs          # Physical parameters
 │  │  └─ PendulumPhysics.cs             # Numerical system solver (RK4)
@@ -173,7 +181,7 @@ docker run --rm -it \
 
 - To run pulled images, use `luniphy/double-pendulum` or `ghcr.io/luniphy/double-pendulum` respectively.
 - Run the container in interactive mode: `-it`
-- json output stored in `output/` directory
+- Json output stored in `output/` directory
 
 ## Mathematics
 
