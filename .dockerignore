@@ -1,14 +1,18 @@
 .github/
-.git/
-.gitignore
 
 docs/
-tests/
-output/example_simulation_13-06-2026__16-48-08.json
 
+output/example_simulation_13-06-2026__16-48-08.json
+output/simulation_*
+
+src/double-pendulum.CLI/credentials/
+src/double-pendulum.Presentation/
+
+tests/
+
+.gitignore
 LICENSE
 README.md
 
-src/double-pendulum.WPF/
 
-src/double-pendulum.CLI/credentials/
+.git/

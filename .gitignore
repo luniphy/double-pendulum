@@ -55,8 +55,12 @@ nunit-*.xml
 
 
 # luni
+.github/workflows/dockerhub_token.txt
+
+output/simulation_*
+
+src/double-pendulum.CLI/credentials/
+
+
 .vs/
 *.user
-output/simulation_*
-.github/workflows/dockerhub_token.txt
-src/double-pendulum.CLI/credentials/
