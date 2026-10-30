@@ -37,13 +37,14 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          load: true
           push: false
           tags: double-pendulum:scan
 
       - name: Scan image for vulnerabilities
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/double-pendulum:latest
+          image-ref: double-pendulum:scan
           format: table
           exit-code: '0'
           severity: HIGH,CRITICAL
