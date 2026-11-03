@@ -25,7 +25,7 @@ public class ExportDTO
 }
 
 /// <summary>
-/// Lists of the cartesian coordinates of the pendulums.
+/// Lists of cartesian coordinates of the pendulums.
 /// </summary>
 public class Coordinates
 {

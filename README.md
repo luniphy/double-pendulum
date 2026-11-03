@@ -34,7 +34,7 @@ The double pendulum is a classical example of a chaotic dynamical system. Small 
 The project is split into three separate components:
 
 - **Model** — physics engine and parameter types, shared by both frontends
-- **CLI** — console application for raw data export to **Json** & **MongoDB**
+- **CLI** — console application for raw data export to **Json** & **MongoDB Atlas**
 - **Presentation** — WPF application built with MVVM
 
 The simulation pipeline is:
@@ -124,6 +124,9 @@ Running the CLI application:
 dotnet run --project src/double-pendulum.CLI
 ```
 
+Notes:
+- When using **MongoDB Atlas**: Make sure you set your `MONGOBD_URI` as an environment variable beforehand. 
+
 ## Testing
 
 Run the full test suite from the solution root:
@@ -169,7 +172,16 @@ And on the [GitHub Container Registry](https://github.com/luniphy/double-pendulu
 docker pull ghcr.io/luniphy/double-pendulum:latest
 ```
 
-### Run the container
+### Run the container with MongoDB
+
+```bash
+docker run --rm -it \
+  -v "$(pwd)/output:/app/output" \
+  -e MONGODB_URI="**ENTER URI HERE**" \
+  double-pendulum
+```
+
+### Run the container without MongoDB
 
 ```bash
 docker run --rm -it \
@@ -182,6 +194,7 @@ docker run --rm -it \
 - To run pulled images, use `luniphy/double-pendulum` or `ghcr.io/luniphy/double-pendulum` respectively.
 - Run the container in interactive mode: `-it`
 - Json output stored in `output/` directory
+- The `MONGODB_URI` usually goes like: `"mongodb+srv://USERNAME:PASSWORD@cluster0.CLUSTERID.mongodb.net"`
 
 ## Mathematics
 
