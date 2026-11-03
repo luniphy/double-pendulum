@@ -124,8 +124,9 @@ Running the CLI application:
 dotnet run --project src/double-pendulum.CLI
 ```
 
-Notes:
-- When using **MongoDB Atlas**: Make sure you set your `MONGOBD_URI` as an environment variable beforehand. 
+When using **MongoDB Atlas**:
+- Set your `MONGOBD_URI` as an environment variable beforehand.
+- In **Atlas**, add your public IP to the **Network Access**.
 
 ## Testing
 
@@ -193,7 +194,8 @@ docker run --rm -it \
 
 - To run pulled images, use `luniphy/double-pendulum` or `ghcr.io/luniphy/double-pendulum` respectively.
 - Run the container in interactive mode: `-it`
-- Json output stored in `output/` directory
+- The volume mount ensures the Json output is stored in the `output/` directory when the container stops.
+- Ensure that your public IP is allowed on the **Atlas** **Network Access** list when using **MongoDB**.
 - The `MONGODB_URI` usually goes like: `"mongodb+srv://USERNAME:PASSWORD@cluster0.CLUSTERID.mongodb.net"`
 
 ## Mathematics
